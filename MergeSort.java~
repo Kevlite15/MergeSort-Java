@@ -1,0 +1,101 @@
+import java.util.Scanner;
+
+
+public class MergeSort {
+ 
+ public static void main(String[] args) {
+  int[] array;
+  Scanner scan = new Scanner(System.in);
+  System.out.print("Enter array length: ");
+  array = new int[Integer.parseInt(scan.nextLine())];
+  for(int i = 0; i < array.length; i++) {
+   array[i] = Integer.parseInt(scan.nextLine());
+  }
+  MergeSort m = new MergeSort();
+  array = m.mergeSort(array);
+  print(array);
+ }
+ 
+ public int[] mergeSort(int[] array) {
+   int[] ans = new int[array.length];
+   int[][] sortedArr = new int[4][8];
+   for(int i = 0; i < array.length; i++){
+     int[] newArr = new int[1];
+     newArr[0] = array[i];
+     sortedArr = merge(sortedArr, newArr);
+   }
+   for(int j = 0; j < sortedArr.length; j++){
+     if(sortedArr[j].length != 0)
+       ans = merge(sortedArr[j], ans);
+   }
+   return ans;
+ }
+ 
+ public int[] merge(int[] a, int[] b) {
+   int[] ans = new int[a.length + b.length];
+   int ai = 0;
+   int bi = 0;
+   int i = 0;
+   while(i < (a.length + b.length)){
+     if(ai >= a.length){
+       ans[i] = b[bi];
+       i++;
+       bi++;
+   }
+     else if(bi >= b.length){
+       ans[i] = a[ai];
+       i++;
+       ai++;
+     }
+     else if (a[ai] < b[bi]){
+       ans[i] = a[ai];
+       i++;
+       ai++;
+     }
+     else{
+      ans[i]= b[bi];
+      i++;
+      bi++;
+     }
+   }
+   return ans;
+ }
+   
+ 
+ public int[][] merge(int[][] sortedArrays, int[] sorted) {
+  int index = log2(sorted.length);
+  if(index >= sortedArrays.length) {
+   sortedArrays = expand(sortedArrays);
+  }
+  if(sortedArrays[index] == null) {
+   sortedArrays[index] = sorted;
+   return sortedArrays;
+  } else {
+   sorted = merge(sorted, sortedArrays[index]);
+   sortedArrays[index] = null;
+   return merge(sortedArrays, sorted);
+  }
+ }
+
+ public int[][] expand(int[][] sortedArrays) {
+  int[][] ans = new int[sortedArrays.length * 2][];
+  for(int i = 0; i < sortedArrays.length; i++) {
+   ans[i] = sortedArrays[i];
+  }
+  return ans;
+ }
+
+ public int log2(int x) {
+  int c = 0;
+  while(x > 1)  {  x /=2;  c++;  }
+  return c;
+ }
+
+ public static void print(int[] array) {
+  if(array == null)  {  System.out.println(); return;  }
+  for(int i = 0; i < array.length; i++) {
+   System.out.print(array[i] + "\t");
+  }
+  System.out.println();
+ }
+}
